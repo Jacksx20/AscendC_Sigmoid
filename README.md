@@ -10,8 +10,8 @@ Ascend C算子开发之Sigmoid自定义算子的实验
 
 要求：
 
-2.1 完成Sigmoid算子kernel侧核函数相关代码补齐。
+1 完成Sigmoid算子kernel侧核函数相关代码补齐。
 
-2.2 完成Sigmoid算子host侧Tiling结构体成员变量创建，以及Tiling实现函数的补齐。
+2 完成Sigmoid算子host侧Tiling结构体成员变量创建，以及Tiling实现函数的补齐。
 
-2.3 要支持Float16类型输入输出。
+3 要支持Float16类型输入输出。
