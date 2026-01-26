@@ -9,8 +9,9 @@ Ascend C算子开发之Sigmoid自定义算子的实验
 
 典型场景举例（若指导文档中CANN版本号与"8.0.0.beta1"不一致，请自行调整）：
 
-    开发者套件（Atlas200I DK A2，或香橙派）部署方式
-    华为云-ModelArts-Notebook 部署方式
+开发者套件（Atlas200I DK A2，或香橙派）部署方式：https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/resource/Atlas%20200I%20DK%20A2%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E6%8C%87%E5%AF%BC-Ascendc%E4%B8%AD%E7%BA%A7%E8%AE%A4%E8%AF%81%E4%B8%93%E7%94%A8.docx
+
+华为云-ModelArts-Notebook 部署方式：https://public-download.obs.cn-east-2.myhuaweicloud.com/%E5%BE%AE%E8%AE%A4%E8%AF%81/%E5%8D%8E%E4%B8%BA%E4%BA%91Ascend%20C%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E6%89%8B%E5%86%8C%E5%BE%AE%E8%AE%A4%E8%AF%810611.docx
 
 ## 题目
 
