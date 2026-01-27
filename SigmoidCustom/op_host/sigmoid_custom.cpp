@@ -8,9 +8,25 @@ const uint32_t BLOCK_DIM = 8;
 const uint32_t TILE_NUM = 8;
 static ge::graphStatus TilingFunc(gert::TilingContext* context)
 {
-
-  SigmoidCustomTilingData tiling;
-    //考生自行填充
+    // 1. Get the shape of input0.
+    // 2. Set the block dimension.
+    // 3. Set the number of tiles.
+    // 4. Save the tiling data.
+    // 5. Return the execution status.
+    if (context == nullptr) {
+        return ge::GRAPH_FAILED;
+    }
+    // 设置tiling数据
+    SigmoidCustomTilingData tiling;
+    uint32_t totalLength = context->GetInputShape(0)->GetOriginShape().GetShapeSize();
+    context->SetBlockDim(BLOCK_DIM);
+    tiling.set_totalLength(totalLength);
+    tiling.set_tileNum(TILE_NUM);
+    tiling.SaveToBuffer(context->GetRawTilingData()->GetData(), context->GetRawTilingData()->GetCapacity());
+    context->GetRawTilingData()->SetDataSize(tiling.GetDataSize());
+    size_t *currentWorkspace = context->GetWorkspaceSizes(1);
+    currentWorkspace[0] = 0;
+    return ge::GRAPH_SUCCESS;
 }
 }
 
