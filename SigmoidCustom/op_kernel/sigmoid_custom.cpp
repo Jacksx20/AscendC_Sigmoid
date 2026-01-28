@@ -6,7 +6,29 @@ public:
     __aicore__ inline KernelSigmoid() {}
     __aicore__ inline void Init(GM_ADDR x, GM_ADDR y, uint32_t totalLength, uint32_t tileNum)
     {
-        //考生补充初始化代码
+        //初始化block相关参数
+        ASSERT(GetBlockNum() != 0 && "block dim can not be zero!");
+        //计算每个block处理的数据长度
+        this->blockLength = totalLength / GetBlockNum();
+        //保存tile数量
+        this->tileNum = tileNum;
+        //计算每个tile处理的数据长度
+        ASSERT(tileNum != 0 && "tile num can not be zero!");
+        //计算每个tile的长度
+        this->tileLength = this->blockLength / tileNum / BUFFER_NUM;
+        //设置全局内存地址
+        xGm.SetGlobalBuffer((__gm__ DTYPE_X *)x + this->blockLength * GetBlockIdx(), 
+        this->blockLength);
+        yGm.SetGlobalBuffer((__gm__ DTYPE_Y *)y + this->blockLength * GetBlockIdx(), 
+        this->blockLength);
+        //初始化pipe和queue
+        pipe.InitBuffer(inQueueX, BUFFER_NUM, this->tileLength * sizeof(half));
+        pipe.InitBuffer(outQueueY, BUFFER_NUM, this->tileLength * sizeof(half));
+        //初始化临时buffer
+        pipe.InitBuffer(tmpBuffer1, this->tileLength * sizeof(half));
+        pipe.InitBuffer(tmpBuffer2, this->tileLength * sizeof(half));
+        pipe.InitBuffer(tmpBuffer3, this->tileLength * sizeof(half));
+        pipe.InitBuffer(tmpBuffer4, this->tileLength * sizeof(half));
 
     }
     __aicore__ inline void Process()
