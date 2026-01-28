@@ -11,7 +11,8 @@ public:
     }
     __aicore__ inline void Process()
     {
-        //考生补充对“loopCount”的定义，注意对Tiling的处理
+        //对“loopCount”的定义，注意对Tiling的处理
+        int32_t loopCount = this->blockLength / this->tileLength;
         for (int32_t i = 0; i < loopCount; i++) {
             CopyIn(i);
             Compute(i);
