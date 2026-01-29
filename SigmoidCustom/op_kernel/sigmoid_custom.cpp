@@ -87,9 +87,39 @@ private:
         // 将本地张量xLocal加入输入队列inQueueX
         inQueueX.EnQue(xLocal);
     }
+
+
+    /**
+     * @brief 计算函数
+     * @param progress 进度参数
+     * @details 该函数实现了算子计算，包括从输入队列中取出数据，
+     * 进行一系列的数学运算，最后将结果存入输出队列。
+     */
     __aicore__ inline void Compute(int32_t progress)
     {
-        //考生补充算子计算代码
+        //算子计算
+        LocalTensor<half> xLocal = inQueueX.DeQue<half>();
+        LocalTensor<half> yLocal = outQueueY.AllocTensor<half>();
+        
+        // 获取临时缓冲区tmp1、tmp2、tmp3
+        LocalTensor<half> tmp1 = tmpBuffer1.Get<half>();
+        LocalTensor<half> tmp2 = tmpBuffer2.Get<half>();
+        LocalTensor<half> tmp3 = tmpBuffer3.Get<half>();
+        
+        // 定义常量
+        half one=1.0,negone=-1.0;
+        // 进行乘法运算，将结果存入tmp1
+        AscendC::Muls(tmp1, xLocal, negone, this->tileLength);
+        // 进行指数运算，将结果存入tmp2
+        AscendC::Exp(tmp2, tmp1, this->tileLength);
+        // 进行加法运算，将结果存入tmp3
+        AscendC::Adds(tmp3, tmp2, one, this->tileLength);
+        // 进行倒数运算，将结果存入yLocal
+        // AscendC::Reciprocal(yLocal, tmp3, this->tileLength);
+        HighPrecisionReciprocal(yLocal,tmp3,this->tileLength,2);
+
+        outQueueY.EnQue<half>(yLocal);
+        inQueueX.FreeTensor(xLocal);
     }
     __aicore__ inline void CopyOut(int32_t progress)
     {
