@@ -123,7 +123,12 @@ private:
     }
     __aicore__ inline void CopyOut(int32_t progress)
     {
-        //考生补充算子代码
+        // 将结果从输出队列中取出并复制到全局内存
+        LocalTensor<half> yLocal = outQueueY.DeQue<half>();
+        // 复制数据到全局内存yGm
+        AscendC::DataCopy(yGm[progress * this->tileLength], yLocal, this->tileLength);
+        // 释放本地张量yLocal
+        outQueueY.FreeTensor(yLocal);
     }
 
 private:
@@ -135,7 +140,10 @@ private:
     GlobalTensor<half> xGm;
     GlobalTensor<half> yGm;
 
-    //考生补充自定义成员变量
+    //定义成员变量
+    uint32_t blockLength;
+    uint32_t tileNum;
+    uint32_t tileLength;
 
 };
 extern "C" __global__ __aicore__ void sigmoid_custom(GM_ADDR x, GM_ADDR y, GM_ADDR workspace, GM_ADDR tiling) {
